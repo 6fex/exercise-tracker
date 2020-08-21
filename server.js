@@ -49,7 +49,9 @@ app.post('/api/exercise/new-user', (req, res) => {
 app.post('/api/exercise/add', (req, res) => {
     const { username, description, duration_mins, date } = req.body;
     
-    const newDate = new Date(date);
+    const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+    const newDate = new Intl.DateTimeFormat('en-US', options).format(new Date(date));
+    const formatedDate = newDate.split(',').join('');
 
     doesUserExist(username)
     .then(() => res.send(`user does not exist :(`))
@@ -58,7 +60,7 @@ app.post('/api/exercise/add', (req, res) => {
             username: username, 
             description: description, 
             duration_mins: duration_mins, 
-            date: newDate
+            date: formatedDate
         }, (error, createdExercise) => {
             if(error) return console.error(error);
             res.json(createdExercise);
@@ -67,46 +69,15 @@ app.post('/api/exercise/add', (req, res) => {
 });
 
 app.get('/api/exercise/log', (req, res) => {
-    const { userId, from, to, limit = 0} = req.query;
+    const { userId, from = -Infinity, to = Infinity, limit = 0} = req.query;
     
-    const fromDate = new Date(from);
-    const toDate = new Date(to);
-
-    if(from !== undefined && to !== undefined) {
-        Exercise.find({username: userId})
-        .find({date: {$gte: fromDate, $lte: toDate}})
-        .sort({date: -1})
-        .limit(limit)
-        .exec((error, exercises) => {
-            if(error) console.error(error);
-            res.json(exercises);
-        });
-    } else if(from !== undefined) {
-        Exercise.find({username: userId})
-        .find({date: {$gte: fromDate}})
-        .sort({date: -1})
-        .limit(limit)
-        .exec((error, exercises) => {
-            if(error) console.error(error);
-            res.json(exercises);
-        });
-    } else if(to !== undefined) {
-        Exercise.find({username: userId})
-        .find({date: {$lte: toDate}})
-        .sort({date: -1})
-        .limit(limit)
-        .exec((error, exercises) => {
-            if(error) console.error(error);
-            res.json(exercises);
-        });
-    } else {
-        Exercise.find({username: userId})
-        .sort({date: -1})
-        .limit(limit)
-        .exec((error, exercises) => {
-            if(error) console.error(error);
-            res.json(exercises);
-        });
-    }
+    Exercise.find({username: userId})
+    .find({date: {$gte: from, $lte: to}})
+    .sort({date: -1})
+    .limit(limit)
+    .exec((error, exercises) => {
+        if(error) console.error(error);
+        res.json(exercises);
+    });
 });
 
