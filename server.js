@@ -17,6 +17,7 @@ app.listen(port, () => {
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
@@ -81,3 +82,9 @@ app.get('/api/exercise/log', (req, res) => {
     });
 });
 
+app.get('/api/exercise/users', (req, res) => {
+    User.find((error, user) => {
+        if(error) return console.error(error);
+        res.json(user);
+    });
+});
