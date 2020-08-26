@@ -44,7 +44,7 @@ app.post('/api/exercise/new-user', (req, res) => {
             res.json(newUser);
         });
     })
-    .catch(()=> res.send('username already taken :('));
+    .catch(()=> res.status(409).send({error: 'username already taken'}));
 });
 
 app.post('/api/exercise/add', (req, res) => {
@@ -55,7 +55,7 @@ app.post('/api/exercise/add', (req, res) => {
     const formatedDate = newDate.split(',').join('');
 
     doesUserExist(username)
-    .then(() => res.send(`user does not exist :(`))
+    .then(() => res.status(409).send({error: 'user does not exist'}))
     .catch(() => {
         Exercise.create({
             username: username, 

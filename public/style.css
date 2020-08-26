@@ -1,9 +1,26 @@
-* {
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+html {
+    height: 100%;
 }
 
-h1 {
+body {
+    min-height: 100%;
+    position: relative;
     text-align: center;
+}
+
+#app {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+form {
+    text-align: left;
+}
+
+#switch {
+    
 }

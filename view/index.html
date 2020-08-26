@@ -4,9 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="normalize.css">
+    <link rel="stylesheet" href="skeleton.css">
     <title>exercise</title>
 </head>
 <body>
-    <h1>hewo 🤣🤣</h1>
+    <main id="app">
+        <div v-if="user_creation">
+            <h1>Create user</h1>
+            <form @submit.prevent="newUserPOST()" id="user_creation">
+                <div class="row">
+                    <label>Username*</label>
+                    <input required v-model="new_user" class="u-full-width" type="text">
+                </div>
+                <button type="submit" class="button-primary">Create</button>
+            </form>
+        </div>
+        <div v-if="add_exercise">
+            <h1>Add exercise 🚴‍♂️‍</h1>
+            <form @submit.prevent="newExercisePOST()" id="add_exercise">
+                <div class="row">
+                    <label>Username*</label>
+                    <input required v-model="username" class="u-full-width" type="text">
+                </div>
+                <div class="row">
+                    <label>Description*</label>
+                    <input required v-model="description" class="u-full-width" type="text">
+                </div>
+                <div class="row">
+                    <label>Duration in mins*</label>
+                    <input required v-model="duration" class="u-full-width" type="number" min="0">
+                </div>
+                <div class="row">
+                    <label>Date (Optional)</label>
+                    <input v-model="date" class="u-full-width" type="date">
+                </div>
+                <button type="submit" class="button-primary">Add</button>
+            </form>
+        </div>
+        <button v-on:click="windowSwitch()" id="switch">{{switchLabel}}</button>
+        <p>{{status}}</p>
+    </main>
+    <script src="https://unpkg.com/vue@2.6.12/dist/vue.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
